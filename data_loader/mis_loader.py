@@ -6,12 +6,15 @@ def load_mis():
     # Clean column names
     df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
 
-    # Handle month/date column
+    # Debug (very important for now)
+    print("Columns in MIS:", df.columns)
+
+    # Handle date/month column safely
     if "month" in df.columns:
-        df["date"] = pd.to_datetime(df["month"])
+        df["date"] = pd.to_datetime(df["month"], errors="coerce")
     elif "date" in df.columns:
-        df["date"] = pd.to_datetime(df["date"])
+        df["date"] = pd.to_datetime(df["date"], errors="coerce")
     else:
-        raise ValueError("No 'month' or 'date' column found in MIS file")
+        raise ValueError(f"No 'month' or 'date' column found. Available columns: {df.columns}")
 
     return df
